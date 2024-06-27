@@ -25,9 +25,9 @@ function productCard(prodImage, prodTitle, prodPrice, prodRating, prodLink, isBe
     </div>
     `
 
-    if (isBestSeller){
+    if (isBestSeller) {
         return html
-    }else{
+    } else {
         html = html.replace('<div class="best-seller-label">Best Seller</div>', "")
         return html
     }
@@ -325,37 +325,48 @@ searchBtn.addEventListener('click', function (event) {
     // Get the input value
     const query = userInput.value;
 
-    const fetchedData = fetch(
-        `http://127.0.0.1:8000/api.v1/products?query=${query}`,
-        {
-            method: 'GET',
-            headers:{
-                "Authorization": "Infr_89b474cf37cb8ada500c387fd4d29f88",
-                "Content-Type": "application/json"
+    const fetchData = async (query) => {
+        try {
+            const response = await fetch(
+                `https://RDeepak-RAG-Embedding-Search-EPs.hf.space/api.v1/products/?query=${query}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": "Infr_89b474cf37cb8ada500c387fd4d29f88",
+                        "Content-Type": "application/json"
+                    }
+                }
+            )
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.statusText}`);
             }
+
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.log('Fetch error: ', error)
+            throw error
         }
-    ).then(response => {
-        if (!response.ok){
-            throw new Error("Server error...")
+    }
+
+    fetchData(
+        query
+    ).then(
+        records => {
+            records.forEach(record => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product');
+                const prodImage = record["imgUrl"]
+                const prodTitle = record["title"]
+                const prodPrice = record["price"]
+                const prodRating = record["stars"]
+                const prodLink = record["productURL"]
+                const isBestSeller = record["isBestSeller"]
+
+                productDiv.innerHTML = productCard(prodImage, prodTitle, prodPrice, prodRating, prodLink, isBestSeller)
+                productsContainer.appendChild(productDiv)
+            });
         }
-        return response.json()
-    })
-
-    // Do something with the input value
-    console.log('Button clicked with query: ', query);
-    console.log(fetchedData)
-
-    // fetchedData.forEach(record => {
-    //     const productDiv = document.createElement('div');
-    //     productDiv.classList.add('product');
-    //     const prodImage = record["imgUrl"]
-    //     const prodTitle = record["title"]
-    //     const prodPrice = record["price"]
-    //     const prodRating = record["stars"]
-    //     const prodLink = record["productURL"]
-    //     const isBestSeller = record["isBestSeller"]
-
-    //     productDiv.innerHTML = productCard(prodImage, prodTitle, prodPrice, prodRating, prodLink, isBestSeller)
-    //     productsContainer.appendChild(productDiv)
-    // });
+    )
 })
