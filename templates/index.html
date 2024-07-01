@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAG BASED SEARCH/RECOMMENDATION ENGINE</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
 </head>
+
 <body>
     <div id="container">
         <div id="header-block">
@@ -20,12 +22,23 @@
                 <button id="btn">Search</button>
             </a>
         </div>
+        <div id="demo-video">
+            <button id="demoBtn">Show Demo</button>
+        </div>
         <div class="divider">
             <hr>
         </div>
-        <div id="products-block">     
+        <div id="products-block">
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe src="https://drive.google.com/file/d/1TYT6El2QOeL72d8326sseQybHHA44Cep/preview"></iframe>
         </div>
     </div>
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </body>
+
 </html>
